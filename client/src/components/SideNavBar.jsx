@@ -55,9 +55,6 @@ export const SideNavBar = ({ children }) => {
             <button className="hover:text-indigo-700">
               <EllipsisVertical size={32} />
             </button>
-            <button className="hover:text-indigo-700">
-              <EllipsisVertical size={32} />
-            </button>
           </div>
         </div>
       </nav>

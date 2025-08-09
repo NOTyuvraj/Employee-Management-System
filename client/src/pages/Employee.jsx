@@ -111,7 +111,7 @@ export const Employee = () => {
             className="bg-gray-100 rounded-lg  h-64 w-64 flex flex-col m-4 ml-8"
           >
             <div className=" m-2 mx-4 flex flex-row justify-between items-center ">
-              <img className="h-16 w-16 rounded-full" src={emp.image} />
+              <img className="h-16 w-16 rounded-full" src={emp.img} />
               <Trash2
                 onClick={() => {
                   DeleteRec(emp._id);
