@@ -166,12 +166,6 @@ export const Employee = () => {
         ))}
       </div>
       <AddEmployee ref={modalRef} />
-      {popup.show && (
-        <Popup
-          handleDeleteTrue={handleDeleteTrue}
-          handleDeleteFalse={handleDeleteFalse}
-        />
-      )}
     </div>
     
   );
