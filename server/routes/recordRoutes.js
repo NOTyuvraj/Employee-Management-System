@@ -31,6 +31,15 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.get("/:dep" , async (req , res) => {
+  try{
+    const record = await Record.find({empDep : req.params.id});
+    res.json(record);
+  }catch(err){
+    res.status(404).json({ error : "Record Not Found" });
+  }
+})
+
 // See all Records
 router.get("/", async (req, res) => {
   try {

@@ -27,9 +27,11 @@ export const Employee = () => {
     modalRef.current.openModal();
   };
 
+  
   const [records, setRecords] = useState([]);
   const [count, setCount] = useState(0);
-  const [searchTerm , setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("");
 
   const fetchRecords = async (query = "") => {
     try {
@@ -41,22 +43,29 @@ export const Employee = () => {
       console.error("Error fetching Records", err);
     }
   };
-
+  
   const DeleteRec = async (id) => {
     await api.delete(`/${id}`);
     alert("Record Deleted");
     window.location.reload();
   };
-
+  
   useEffect(() => {
-    if(searchTerm.trim() === ""){
+    if (searchTerm.trim() === "") {
       fetchRecords();
-    }else{
+    } else {
       fetchRecords(searchTerm);
     }
   }, [searchTerm]);
-
   
+  useEffect(()=>{
+    if(departmentFilter.trim() === ""){
+      fetchRecords();
+    } else{
+      fetchRecords(departmentFilter);
+    }
+  } , [departmentFilter]);
+
 
   return (
     <div className="flex flex-col h-screen w-screen">
@@ -70,7 +79,7 @@ export const Employee = () => {
               placeholder="Search for Employees"
               type="textarea"
               value={searchTerm}
-              onChange={(e)=>setSearchTerm(e.target.value)}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
           <div className="flex justify-center items-center ml-4 rounded-full h-10 w-10 border">
@@ -93,6 +102,16 @@ export const Employee = () => {
           <span className="text-indigo-700">{count}</span>&nbsp;Employee
         </div>
         <div>
+          <select
+            className="mr-8 px-2 py-2 text-xl border-none hover:bg-indigo-200"
+            value={departmentFilter}
+            onChange={(e) => setDepartmentFilter(e.target.value)}
+          >
+            <option value="">All Departments</option>
+            <option value="Human Resource">Human Resource</option>
+            <option value="Tech">Tech</option>
+            <option value="Engineering">Engineering</option>
+          </select>
           <button
             onClick={openDialog}
             className="mr-8 px-2 py-2 text-xl rounded bg-indigo-700 text-white hover:bg-indigo-600 border-none "
@@ -147,6 +166,13 @@ export const Employee = () => {
         ))}
       </div>
       <AddEmployee ref={modalRef} />
+      {popup.show && (
+        <Popup
+          handleDeleteTrue={handleDeleteTrue}
+          handleDeleteFalse={handleDeleteFalse}
+        />
+      )}
     </div>
+    
   );
 };
