@@ -1,17 +1,22 @@
 import express from "express";
-import userModel from "../models/userModel";
+import jsonwebtoken from "jsonwebtoken";
+import dotenv from "dotenv";
+import { signin, signup } from "../controllers/userAuth.js";
 
 const router = express.Router();
 
-router.post('/' , async (req , res)=>{
-  try{
-    const user = new userModel(req.body);
-    await user.save();
-    res.json(user);
-  }catch(err){
-    res.json({error : err.message});
-  }
-})
+dotenv.config();
 
+const generateAccesToken = (username) =>{
+  return jsonwebtoken.sign(username , process.env.TOKEN_SECRET , {expiresIn : '1000s'});
+}
+
+router.post("/register", signup ,async (req, res) => {
+  
+});
+
+router.post("/login", signin , async(req , res) => {
+  
+})
 
 export default router;
