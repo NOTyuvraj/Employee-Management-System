@@ -7,16 +7,8 @@ const router = express.Router();
 
 dotenv.config();
 
-const generateAccesToken = (username) =>{
-  return jsonwebtoken.sign(username , process.env.TOKEN_SECRET , {expiresIn : '1000s'});
-}
+router.post("/register", signup);
 
-router.post("/register", signup ,async (req, res) => {
-  
-});
-
-router.post("/login", signin , async(req , res) => {
-  
-})
+router.post("/login", signin)
 
 export default router;
