@@ -13,10 +13,7 @@ export const signup = async (req, res) => {
       role,
     });
     await newUser.save();
-    const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, {
-      expiresIn: "1000s",
-    });
-    res.json({ message: "User Registered", accessToken: token });
+    res.json({ message : `User registered with name ${newUser.name}` });
   } catch (err) {
     res.json({ error: "Signup Failed" });
   }
@@ -25,18 +22,24 @@ export const signup = async (req, res) => {
 export const signin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const userPass = await User.findOne({ email });
-    if (!userPass) {
+    const user = await User.findOne({ email });
+    if (!user) {
       res.json({ error: "User not found" });
       return;
     }
-    const isMatch = await compare(password, userPass.password);
+    const isMatch = await compare(password, user.password);
     if (!isMatch) {
       res.json({ error: "Wrong Password" });
       return;
     }
-    const token = jwt.sign({id : userPass._id} , process.env.TOKEN_SECRET , {expiresIn : '1000s'});
-    res.json({ message: "Login Succesful" , accessToken : token});
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.TOKEN_SECRET,
+      {
+        expiresIn: "1000s",
+      }
+    );
+    res.json({ token });
   } catch (err) {
     res.json({ error: "Server Error" });
   }
