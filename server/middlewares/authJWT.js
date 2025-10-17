@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import jwt, { decode } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -23,5 +23,7 @@ export const verifyToken = (req, res, next) => {
     }catch(err){
       res.staus(400).json({message : "Token is not valid"})
     }
+  }else{
+    return res.status(404).json({message : "Token not detected"});
   }
 };
