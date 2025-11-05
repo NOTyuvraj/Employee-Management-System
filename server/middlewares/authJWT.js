@@ -5,8 +5,8 @@ dotenv.config();
 
 export const verifyToken = (req, res, next) => {
   let token;
-  let authHeader = req.headers.Authorization || req.headers.authorization;
-  if (authHeader && authHeader.startsWith("Bearer")) {
+  let authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
     token = authHeader.split(" ")[1];
 
     if (!token) {
@@ -21,7 +21,7 @@ export const verifyToken = (req, res, next) => {
       console.log("The decoded user : " , req.user);
       next(); 
     }catch(err){
-      res.staus(400).json({message : "Token is not valid"})
+      res.status(400).json({message : "Token is not valid"})
     }
   }else{
     return res.status(404).json({message : "Token not detected"});

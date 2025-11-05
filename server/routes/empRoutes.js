@@ -1,33 +1,17 @@
 import express from "express";
-import EmpModel from "../models/empModel.js";
-
+import { verifyToken } from "../middlewares/authJWT.js";
+import { authorizeRole } from "../middlewares/authRoles.js";
+import { createEmp, getEmps, getEmpById, updateEmp, deleteEmp } from "../controllers/empAuth.js";
 const router = express.Router();
 
-router.post("/create", async (req, res) => {
-  try {
-    const { name, jobTitle, department, email, phone } = req.body;
-    const emp = new EmpModel({
-      name,
-      jobTitle,
-      department,
-      email,
-      phone,
-    });
+router.post("/", verifyToken, authorizeRole("admin"), createEmp);
 
-    await emp.save();
-    return res.status(200).json({ message: "Employee Created" });
-  } catch (err) {
-    return res.status(500).json({ message: "Employee cannot be created" });
-  }
-});
+router.get("/", verifyToken, authorizeRole("admin", "manager"), getEmps);
 
-router.get("/all", async (req, res) => {
-  try {
-    const allEmp = await EmpModel.find();
-    return res.status(200).json(allEmp);
-  } catch (err) {
-    return res.status(400).json({ message: "Cannot find any Employees" });
-  }
-});
+router.get("/:id", verifyToken, authorizeRole("admin", "manager"), getEmpById);
+
+router.put("/:id", verifyToken, authorizeRole("admin"), updateEmp);
+
+router.delete("/:id", verifyToken, authorizeRole("admin"), deleteEmp);
 
 export default router;
